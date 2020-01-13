@@ -25,6 +25,7 @@ if [ ! -n "${BULLETTRAIN_PROMPT_ORDER+1}" ]; then
     dir
     screen
     perl
+    watson
     ruby
     virtualenv
     nvm
@@ -217,6 +218,17 @@ if [ ! -n "${BULLETTRAIN_GIT_EXTENDED+1}" ]; then
 fi
 if [ ! -n "${BULLETTRAIN_GIT_PROMPT_CMD+1}" ]; then
   BULLETTRAIN_GIT_PROMPT_CMD="\$(git_prompt_info)"
+fi
+
+# WATSON
+if [ ! -n "${BULLETTRAIN_WATSON_BG+1}" ]; then
+  BULLETTRAIN_WATSON_BG=yellow
+fi
+if [ ! -n "${BULLETTRAIN_WATSON_FG+1}" ]; then
+  BULLETTRAIN_WATSON_FG=black
+fi
+if [ ! -n "${BULLETTRAIN_WATSON_PREFIX+1}" ]; then
+  BULLETTRAIN_WATSON_PREFIX=🕗
 fi
 
 # PERL
@@ -533,10 +545,16 @@ prompt_elixir() {
 }
 
 # PERL
-# PLENV: shows current PERL version active in the shell
 prompt_perl() {
   if command -v plenv > /dev/null 2>&1; then
     prompt_segment $BULLETTRAIN_PERL_BG $BULLETTRAIN_PERL_FG $BULLETTRAIN_PERL_PREFIX" $(plenv version | sed -e 's/ (set.*$//')"
+  fi
+}
+
+# WATSON
+prompt_watson() {
+  if [[ "$(watson status -e)" != 'No project started.' ]]; then
+    prompt_segment $BULLETTRAIN_WATSON_BG $BULLETTRAIN_WATSON_FG $BULLETTRAIN_WATSON_PREFIX" $(watson status -e)"
   fi
 }
 
