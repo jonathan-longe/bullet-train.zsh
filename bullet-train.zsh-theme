@@ -554,7 +554,13 @@ prompt_perl() {
 # WATSON
 prompt_watson() {
   if [[ "$(watson status -e)" != 'No project started.' ]]; then
-    prompt_segment $BULLETTRAIN_WATSON_BG $BULLETTRAIN_WATSON_FG $BULLETTRAIN_WATSON_PREFIX" $(watson status -e)"
+    json=$(watson log -c -j)	
+    start_string=$(echo $json | jq -r '.[0].start')
+    tags=$(echo $json | jq -r '.[0].tags[0]')
+    start_epoch=$(date -d $start_string +%s)
+    stop_epoch=$(date -d now +%s)
+    seconds=$(($stop_epoch - $start_epoch))
+    prompt_segment $BULLETTRAIN_WATSON_BG $BULLETTRAIN_WATSON_FG $BULLETTRAIN_WATSON_PREFIX" $tags $(date -ud @$seconds +%-H:%M)"
   fi
 }
 
