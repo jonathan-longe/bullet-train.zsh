@@ -555,8 +555,8 @@ prompt_perl() {
 prompt_watson() {
   if [[ "$(watson status -e)" != 'No project started.' ]]; then
     json=$(watson log -c -j)	
-    start_string=$(echo $json | jq -r '.[0].start')
-    tags=$(echo $json | jq -r '.[0].tags[0]')
+    start_string=$(echo $json | jq -r '.[-1].start')
+    tags=$(echo $json | jq -r '.[-1].tags[0]')
     start_epoch=$(date -d $start_string +%s)
     stop_epoch=$(date -d now +%s)
     seconds=$(($stop_epoch - $start_epoch))
